@@ -47,6 +47,7 @@ export default async function handler(req, res) {
         email: decoded.email,
         name: decoded.name,
         avatar: decoded.avatar,
+        role: decoded.role || "user",
       },
     });
   } catch (error) {

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { USER_ROLES } from '../utils/constants';
 
 const AuthContext = createContext(null);
 
@@ -67,13 +68,49 @@ export function AuthProvider({ children }) {
         if (response.data.token) {
           localStorage.setItem('token', response.data.token);
         }
-        return { success: true };
+        return { success: true, user: response.data.user };
       }
 
       return { success: false, error: 'Login failed' };
     } catch (err) {
       console.error('Login error:', err);
       const errorMessage = err.response?.data?.error || err.message || 'Failed to login with Google';
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loginWithEmail = async (email, password) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await axios.post(
+        `${API_URL}/auth/login-email`,
+        { email, password },
+        { 
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      if (response.data.success) {
+        setUser(response.data.user);
+        // Store token in localStorage for subsequent requests
+        if (response.data.token) {
+          localStorage.setItem('token', response.data.token);
+        }
+        return { success: true, user: response.data.user };
+      }
+
+      return { success: false, error: 'Login failed' };
+    } catch (err) {
+      console.error('Login error:', err);
+      const errorMessage = err.response?.data?.error || err.message || 'Failed to login';
       setError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
@@ -107,14 +144,20 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const isAdmin = () => {
+    return user?.role === USER_ROLES.ADMIN;
+  };
+
   const value = {
     user,
     loading,
     error,
     loginWithGoogle,
+    loginWithEmail,
     logout,
     checkAuth,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
+    isAdmin: isAdmin(),
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

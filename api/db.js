@@ -57,7 +57,10 @@ export async function initializeDatabase() {
 export async function findUserByGoogleId(googleId) {
   const sql = getSql();
   const result = await sql`
-    SELECT * FROM users WHERE google_id = ${googleId} LIMIT 1
+    SELECT id, email, name, google_id, avatar, role, created_at, updated_at 
+    FROM users 
+    WHERE google_id = ${googleId} 
+    LIMIT 1
   `;
   return result[0] || null;
 }
@@ -65,17 +68,35 @@ export async function findUserByGoogleId(googleId) {
 export async function findUserByEmail(email) {
   const sql = getSql();
   const result = await sql`
+    SELECT id, email, name, google_id, avatar, role, created_at, updated_at 
+    FROM users 
+    WHERE email = ${email} 
+    LIMIT 1
+  `;
+  return result[0] || null;
+}
+
+export async function findUserByEmailWithPassword(email) {
+  const sql = getSql();
+  const result = await sql`
     SELECT * FROM users WHERE email = ${email} LIMIT 1
   `;
   return result[0] || null;
 }
 
-export async function createUser({ email, name, googleId, avatar }) {
+export async function createUser({
+  email,
+  name,
+  googleId,
+  avatar,
+  password,
+  role = "user",
+}) {
   const sql = getSql();
   const result = await sql`
-    INSERT INTO users (email, name, google_id, avatar)
-    VALUES (${email}, ${name}, ${googleId}, ${avatar})
-    RETURNING *
+    INSERT INTO users (email, name, google_id, avatar, password, role)
+    VALUES (${email}, ${name}, ${googleId}, ${avatar}, ${password}, ${role})
+    RETURNING id, email, name, google_id, avatar, role, created_at, updated_at
   `;
   return result[0];
 }
@@ -88,7 +109,7 @@ export async function updateUser(id, { name, avatar }) {
         avatar = ${avatar},
         updated_at = CURRENT_TIMESTAMP
     WHERE id = ${id}
-    RETURNING *
+    RETURNING id, email, name, google_id, avatar, role, created_at, updated_at
   `;
   return result[0];
 }
