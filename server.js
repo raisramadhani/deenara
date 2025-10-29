@@ -24,6 +24,7 @@ if (missingEnvVars.length > 0) {
 }
 
 import loginHandler from "./api/auth/login.js";
+import loginEmailHandler from "./api/auth/login-email.js";
 import logoutHandler from "./api/auth/logout.js";
 import meHandler from "./api/auth/me.js";
 import initDbHandler from "./api/auth/init-db.js";
@@ -68,6 +69,7 @@ const wrapHandler = (handler) => async (req, res) => {
 
 // Auth routes
 app.post("/api/auth/login", wrapHandler(loginHandler));
+app.post("/api/auth/login-email", wrapHandler(loginEmailHandler));
 app.post("/api/auth/logout", wrapHandler(logoutHandler));
 app.get("/api/auth/me", wrapHandler(meHandler));
 app.get("/api/auth/init-db", wrapHandler(initDbHandler));

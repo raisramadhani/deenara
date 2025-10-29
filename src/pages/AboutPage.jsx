@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from '../hooks/useTranslation';
 
 const AboutPage = () => {
+  const { t } = useTranslation();
+  
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -13,10 +16,10 @@ const AboutPage = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              Tentang Kami
+              {t('about.hero.title')}
             </h1>
             <p className="text-xl text-gray-100 leading-relaxed">
-              Menghubungkan Anda dengan produk berkualitas tinggi dari seluruh dunia
+              {t('about.hero.subtitle')}
             </p>
           </div>
         </div>

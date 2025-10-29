@@ -1,21 +1,31 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { USER_ROLES } from '../utils/constants';
 
 export default function LoginPage() {
-  const { loginWithGoogle, isAuthenticated, loading, error } = useAuth();
+  const { loginWithGoogle, loginWithEmail, isAuthenticated, user, loading, error } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [googleLoaded, setGoogleLoaded] = useState(false);
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formError, setFormError] = useState('');
+  const [formLoading, setFormLoading] = useState(false);
 
   const from = location.state?.from?.pathname || '/';
 
+  // Helper function to redirect based on role
+  const redirectUser = (userRole) => {
+    const destination = userRole === USER_ROLES.ADMIN ? '/admin/dashboard' : from;
+    navigate(destination, { replace: true });
+  };
+
   // Redirect if already authenticated
   useEffect(() => {
-    if (isAuthenticated && !loading) {
-      navigate(from, { replace: true });
+    if (isAuthenticated && !loading && user) {
+      redirectUser(user.role);
     }
-  }, [isAuthenticated, loading, navigate, from]);
+  }, [isAuthenticated, loading, user, navigate, from]);
 
   // Load Google Sign-In script
   useEffect(() => {
@@ -36,16 +46,14 @@ export default function LoginPage() {
     if (!googleLoaded || !window.google) return;
 
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    
+
     if (!clientId) {
-      console.error('Google Client ID not found. Please set VITE_GOOGLE_CLIENT_ID in .env');
       return;
     }
 
     // Check if button container exists
     const buttonContainer = document.getElementById('google-signin-button');
     if (!buttonContainer) {
-      console.error('Google button container not found');
       return;
     }
 
@@ -69,20 +77,53 @@ export default function LoginPage() {
         }
       );
     } catch (error) {
-      console.error('Error initializing Google Sign-In:', error);
+      // Silent fail - Google Sign-In initialization failed
     }
   }, [googleLoaded]);
 
   const handleGoogleResponse = async (response) => {
     try {
       const result = await loginWithGoogle(response.credential);
-      
+
       if (result.success) {
-        navigate(from, { replace: true });
+        redirectUser(result.user?.role);
       }
     } catch (error) {
-      console.error('Error handling Google response:', error);
+      // Error already handled by loginWithGoogle
     }
+  };
+
+  const handleEmailLogin = async (e) => {
+    e.preventDefault();
+    setFormError('');
+
+    if (!formData.email || !formData.password) {
+      setFormError('Email dan password harus diisi');
+      return;
+    }
+
+    try {
+      setFormLoading(true);
+      const result = await loginWithEmail(formData.email, formData.password);
+
+      if (result.success) {
+        redirectUser(result.user?.role);
+      } else {
+        setFormError(result.error || 'Login gagal');
+      }
+    } catch (error) {
+      setFormError('Terjadi kesalahan saat login');
+    } finally {
+      setFormLoading(false);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+    setFormError('');
   };
 
   if (loading) {
@@ -133,9 +174,9 @@ export default function LoginPage() {
           <div className="text-center mb-8">
             <div className="flex justify-center mb-6">
               <div className="relative">
-                <img 
-                  src="/logo.png" 
-                  alt="Deenara" 
+                <img
+                  src="/logo.png"
+                  alt="Deenara"
                   className="h-16 brightness-0 invert drop-shadow-lg"
                 />
                 <div className="absolute inset-0 bg-white blur-xl opacity-30 animate-pulse-slow"></div>
@@ -150,7 +191,7 @@ export default function LoginPage() {
           </div>
 
           {/* Error Message */}
-          {error && (
+          {(error || formError) && (
             <div className="mb-6 bg-red-500/20 backdrop-blur-sm border border-red-300/30 rounded-2xl p-4 animate-shake">
               <div className="flex items-start">
                 <svg
@@ -166,7 +207,7 @@ export default function LoginPage() {
                     d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p className="ml-3 text-white font-medium">{error}</p>
+                <p className="ml-3 text-white font-medium">{error || formError}</p>
               </div>
             </div>
           )}
@@ -175,7 +216,7 @@ export default function LoginPage() {
           <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 transform hover:scale-[1.02] transition-all duration-300">
             <div className="flex flex-col items-center space-y-6">
               {/* Sign In Icon */}
-              <div className="w-20 h-20 bg-gradient-to-br from-primary to-arctic rounded-2xl flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300">
+              <div className="w-20 h-20 bg-gradient-to-br from-primary to-arctic rounded-2xl flex items-center justify-center shadow-lg">
                 <svg
                   className="h-10 w-10 text-white"
                   fill="none"
@@ -193,15 +234,80 @@ export default function LoginPage() {
 
               <div className="text-center">
                 <h2 className="text-2xl font-bold text-charcoal mb-2">
-                  Masuk dengan Google
+                  Masuk ke Akun Anda
                 </h2>
                 <p className="text-gray-600">
-                  Autentikasi cepat dan aman
+                  Pilih metode login yang Anda inginkan
                 </p>
               </div>
 
+              {/* Email/Password Form */}
+              <form onSubmit={handleEmailLogin} className="w-full space-y-4">
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="nama@email.com"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 outline-none"
+                    autoComplete="email"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    placeholder="••••••••"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 outline-none"
+                    autoComplete="current-password"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={formLoading}
+                  className="w-full bg-gradient-to-r from-primary to-arctic text-white py-3 px-6 rounded-xl font-semibold hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                >
+                  {formLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                      <span>Memproses...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                      </svg>
+                      <span>Masuk dengan Email</span>
+                    </>
+                  )}
+                </button>
+              </form>
+
+              {/* Divider */}
+              <div className="w-full relative py-2">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-200"></div>
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="px-4 bg-white text-sm font-medium text-gray-500">
+                    atau
+                  </span>
+                </div>
+              </div>
+
               {/* Google Sign-In Button */}
-              <div className="w-full flex justify-center pt-2">
+              <div className="w-full flex justify-center">
                 <div id="google-signin-button"></div>
               </div>
 
@@ -211,76 +317,6 @@ export default function LoginPage() {
                   <span className="text-sm">Memuat Google Sign-In...</span>
                 </div>
               )}
-
-              {/* Divider */}
-              <div className="w-full relative py-4">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-200"></div>
-                </div>
-                <div className="relative flex justify-center">
-                  <span className="px-4 bg-white text-sm font-medium text-gray-500">
-                    Mengapa harus masuk?
-                  </span>
-                </div>
-              </div>
-
-              {/* Features */}
-              <div className="w-full space-y-3">
-                <div className="flex items-center space-x-3 text-gray-700 group">
-                  <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
-                    <svg
-                      className="h-5 w-5 text-primary"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                  <span className="font-medium">Simpan item favorit Anda</span>
-                </div>
-                <div className="flex items-center space-x-3 text-gray-700 group">
-                  <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
-                    <svg
-                      className="h-5 w-5 text-primary"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                  <span className="font-medium">Lacak pesanan dengan mudah</span>
-                </div>
-                <div className="flex items-center space-x-3 text-gray-700 group">
-                  <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
-                    <svg
-                      className="h-5 w-5 text-primary"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                  <span className="font-medium">Proses checkout lebih cepat</span>
-                </div>
-              </div>
             </div>
           </div>
 

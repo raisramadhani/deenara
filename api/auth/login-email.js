@@ -1,5 +1,6 @@
-import { findUserByGoogleId, createUser } from "../db.js";
-import { verifyGoogleToken, generateToken, setCookie } from "../auth-utils.js";
+import { findUserByEmailWithPassword, createUser } from "../db.js";
+import { generateToken, setCookie } from "../auth-utils.js";
+import bcrypt from "bcryptjs";
 
 export default async function handler(req, res) {
   // Enable CORS
@@ -14,9 +15,6 @@ export default async function handler(req, res) {
     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
   );
 
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
-  res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
-
   if (req.method === "OPTIONS") {
     res.status(200).end();
     return;
@@ -27,30 +25,32 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { credential } = req.body;
+    const { email, password } = req.body;
 
-    if (!credential) {
-      return res.status(400).json({ error: "Google credential is required" });
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" });
     }
 
-    // Verify Google token
-    const googleUser = await verifyGoogleToken(credential);
+    // Find user by email
+    const user = await findUserByEmailWithPassword(email);
 
-    if (!googleUser) {
-      return res.status(401).json({ error: "Invalid Google token" });
-    }
-
-    // Check if user exists
-    let user = await findUserByGoogleId(googleUser.googleId);
-
-    // If user doesn't exist, create new user
     if (!user) {
-      user = await createUser({
-        email: googleUser.email,
-        name: googleUser.name,
-        googleId: googleUser.googleId,
-        avatar: googleUser.avatar,
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    // Check if user has password (not Google OAuth only)
+    if (!user.password) {
+      return res.status(401).json({
+        error: "This account uses Google Sign-In. Please login with Google.",
       });
+    }
+
+    // Verify password
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+      return res.status(401).json({ error: "Invalid email or password" });
     }
 
     // Generate JWT token
@@ -59,6 +59,7 @@ export default async function handler(req, res) {
     // Set cookie
     setCookie(res, "token", token);
 
+    // Return user data without password
     return res.status(200).json({
       success: true,
       token,
@@ -67,7 +68,7 @@ export default async function handler(req, res) {
         email: user.email,
         name: user.name,
         avatar: user.avatar,
-        role: user.role || "user",
+        role: user.role,
       },
     });
   } catch (error) {

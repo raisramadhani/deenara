@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { productService } from '../services/api';
 import { useCart } from '../context/CartContext';
+import { useTranslation } from '../hooks/useTranslation';
 import { formatCurrency } from '../utils/helpers';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 
 const ProductDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -59,7 +61,7 @@ const ProductDetailPage = () => {
                 clipRule="evenodd"
               />
             </svg>
-            <span>Produk berhasil ditambahkan ke keranjang!</span>
+            <span>{t('productDetail.addedToCart')}</span>
           </div>
         </div>
       )}
@@ -83,16 +85,13 @@ const ProductDetailPage = () => {
               <li>/</li>
               <li>
                 <Link to="/products" className="hover:text-white transition-colors">
-                  Produk
+                  {t('navbar.products')}
                 </Link>
               </li>
               <li>/</li>
-              <li className="text-white font-medium">Detail Produk</li>
+              <li className="text-white font-medium">{t('productDetail.category')}</li>
             </ol>
           </nav>
-          <h1 className="text-3xl md:text-4xl font-bold">
-            Detail Produk
-          </h1>
         </div>
       </section>
 
@@ -143,7 +142,7 @@ const ProductDetailPage = () => {
                     ))}
                   </div>
                   <span className="ml-2 text-charcoal-light">
-                    {product.rating.rate} ({product.rating.count} ulasan)
+                    {product.rating.rate} ({product.rating.count} {t('productDetail.reviews')})
                   </span>
                 </div>
               )}
@@ -184,7 +183,7 @@ const ProductDetailPage = () => {
                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                   />
                 </svg>
-                <span>Tambah ke Keranjang</span>
+                <span>{t('productDetail.addToCart')}</span>
               </button>
             </div>
           </div>

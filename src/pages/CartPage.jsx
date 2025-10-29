@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useTranslation } from '../hooks/useTranslation';
 import { formatCurrency } from '../utils/helpers';
 
 const CartPage = () => {
+  const { t } = useTranslation();
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } =
     useCart();
 
@@ -27,10 +29,10 @@ const CartPage = () => {
           <div className="container mx-auto px-4 relative z-10">
             <div className="text-center">
               <h1 className="text-5xl md:text-6xl font-bold mb-4">
-                Keranjang Belanja
+                {t('cart.hero.title')}
               </h1>
               <p className="text-xl text-gray-100">
-                Kelola produk pilihan Anda sebelum checkout
+                {t('cart.hero.subtitle')}
               </p>
             </div>
           </div>
@@ -53,13 +55,13 @@ const CartPage = () => {
               />
             </svg>
             <h2 className="text-2xl font-semibold text-charcoal mb-3">
-              Keranjang Belanja Kosong
+              {t('cart.empty.title')}
             </h2>
             <p className="text-charcoal-light mb-6">
-              Anda belum menambahkan produk ke keranjang
+              {t('cart.empty.subtitle')}
             </p>
             <Link to="/products" className="btn-primary">
-              Mulai Belanja
+              {t('cart.empty.shopBtn')}
             </Link>
           </div>
         </div>
@@ -98,7 +100,7 @@ const CartPage = () => {
 
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-charcoal">Item Keranjang</h2>
+          <h2 className="text-2xl font-bold text-charcoal">{t('cart.cartItems')}</h2>
           <button
             onClick={clearCart}
             className="text-red-500 hover:text-red-600 font-medium flex items-center space-x-1"
@@ -115,7 +117,7 @@ const CartPage = () => {
                 clipRule="evenodd"
               />
             </svg>
-            <span>Kosongkan Keranjang</span>
+            <span>{t('cart.clearCart')}</span>
           </button>
         </div>
 
@@ -247,24 +249,26 @@ const CartPage = () => {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24">
               <h2 className="text-2xl font-semibold text-charcoal mb-6">
-                Ringkasan Belanja
+                {t('cart.orderSummary')}
               </h2>
 
               <div className="space-y-4 mb-6">
                 <div className="flex items-center justify-between">
-                  <span className="text-charcoal-light">Subtotal</span>
+                  <span className="text-charcoal-light">{t('cart.subtotal')}</span>
                   <span className="font-semibold text-charcoal">
                     {formatCurrency(getCartTotal())}
                   </span>
                 </div>
+
                 <div className="flex items-center justify-between">
-                  <span className="text-charcoal-light">Pengiriman</span>
-                  <span className="font-semibold text-green-500">Gratis</span>
+                  <span className="text-charcoal-light">{t('cart.shipping')}</span>
+                  <span className="font-semibold text-green-600">{t('cart.free')}</span>
                 </div>
+
                 <div className="border-t border-border pt-4">
                   <div className="flex items-center justify-between">
                     <span className="text-xl font-semibold text-charcoal">
-                      Total
+                      {t('cart.total')}
                     </span>
                     <span className="text-2xl font-bold text-primary">
                       {formatCurrency(getCartTotal())}
@@ -274,7 +278,7 @@ const CartPage = () => {
               </div>
 
               <button className="btn-primary w-full mb-3">
-                Lanjut ke Pembayaran
+                {t('cart.checkout')}
               </button>
               <p className="text-xs text-charcoal-light text-center">
                 Fitur pembayaran akan segera hadir

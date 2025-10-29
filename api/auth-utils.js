@@ -10,6 +10,7 @@ export function generateToken(user) {
     email: user.email,
     name: user.name,
     avatar: user.avatar,
+    role: user.role || "user",
   };
 
   return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });

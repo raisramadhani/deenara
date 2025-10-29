@@ -5,10 +5,27 @@ export const API_BASE_URL = "https://fakestoreapi.com";
 export const APP_NAME = "Deenara";
 export const APP_VERSION = "1.0.0";
 
+// User Roles (Enum)
+export const USER_ROLES = {
+  ADMIN: "admin",
+  USER: "user",
+};
+
+// Check if user has admin role
+export const isAdmin = (user) => {
+  return user?.role === USER_ROLES.ADMIN;
+};
+
+// Check if user has specific role
+export const hasRole = (user, role) => {
+  return user?.role === role;
+};
+
 // Local Storage Keys
 export const STORAGE_KEYS = {
   CART: "deenara-cart",
   USER: "deenara-user",
+  TOKEN: "token",
 };
 
 // Theme Colors

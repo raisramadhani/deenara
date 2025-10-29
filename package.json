@@ -12,11 +12,13 @@
     "dev:full": "concurrently \"npm run dev:api\" \"npm run dev\"",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "hash-password": "node scripts/generate-password-hash.js"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
     "axios": "^1.13.1",
+    "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",

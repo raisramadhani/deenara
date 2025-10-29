@@ -1,11 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
 import { productService } from '../services/api';
 import { formatCurrency, USD_TO_IDR_RATE } from '../utils/helpers';
+import { useTranslation } from '../hooks/useTranslation';
 import ProductCard from '../components/ProductCard';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 
 const ProductsPage = () => {
+  const { t } = useTranslation();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -135,10 +137,10 @@ const ProductsPage = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              Semua Produk
+              {t('products.hero.title')}
             </h1>
             <p className="text-xl text-gray-100 leading-relaxed max-w-2xl mx-auto">
-              Jelajahi koleksi lengkap produk berkualitas tinggi dari berbagai kategori
+              {t('products.hero.subtitle')}
             </p>
           </div>
         </div>
@@ -274,7 +276,7 @@ const ProductsPage = () => {
                       className="w-4 h-4 text-primary focus:ring-primary focus:ring-2"
                     />
                     <span className="ml-3 text-sm text-charcoal-light group-hover:text-charcoal">
-                      Semua Kategori
+                      {t('products.allCategories')}
                     </span>
                   </label>
                   {categories.map((category) => (
@@ -379,7 +381,7 @@ const ProductsPage = () => {
             {/* Products Count */}
             <div className="mb-6 flex items-center justify-between">
               <p className="text-charcoal-light">
-                Menampilkan <span className="font-semibold text-charcoal">{filteredProducts.length}</span> dari {products.length} produk
+                {filteredProducts.length} {t('products.resultsFound')}
               </p>
               {(searchQuery || selectedCategory !== 'all' || minRating > 0 || 
                 priceRange[0] > 0 || priceRange[1] < Math.max(...products.map(p => p.price))) && (
@@ -405,10 +407,10 @@ const ProductsPage = () => {
                   />
                 </svg>
                 <p className="text-xl text-charcoal-light mb-2">
-                  Tidak ada produk ditemukan
+                  {t('products.noProducts')}
                 </p>
                 <p className="text-sm text-charcoal-light mb-4">
-                  Coba ubah filter atau kata kunci pencarian Anda
+                  {t('products.tryAdjust')}
                 </p>
                 <button
                   onClick={handleResetFilters}
