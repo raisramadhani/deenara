@@ -60,12 +60,12 @@ export default function LoginPage() {
       window.google.accounts.id.renderButton(
         buttonContainer,
         {
-          theme: 'outline',
+          theme: 'filled_blue',
           size: 'large',
           text: 'continue_with',
-          shape: 'rectangular',
+          shape: 'pill',
           logo_alignment: 'left',
-          width: 350,
+          width: 280,
         }
       );
     } catch (error) {
@@ -87,154 +87,215 @@ export default function LoginPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-primary-light to-arctic">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-white border-t-transparent mx-auto"></div>
+          <p className="mt-4 text-white font-medium">Memuat...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <div className="flex justify-center">
-            <div className="h-16 w-16 bg-indigo-600 rounded-full flex items-center justify-center">
-              <svg
-                className="h-10 w-10 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-            </div>
-          </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link to="/" className="font-medium text-indigo-600 hover:text-indigo-500">
-              continue shopping
-            </Link>
-          </p>
-        </div>
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-primary via-primary-light to-arctic">
+      {/* Animated Background Shapes */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-float-delayed"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse-slow"></div>
+      </div>
 
-        <div className="mt-8 space-y-6">
+      {/* Back to Home Button */}
+      <Link
+        to="/"
+        className="absolute top-6 left-6 flex items-center space-x-2 text-white hover:text-white/80 transition-all duration-300 z-50 group backdrop-blur-sm bg-white/10 px-4 py-2 rounded-full hover:bg-white/20"
+      >
+        <svg
+          className="w-6 h-6 transform group-hover:-translate-x-1 transition-transform duration-300"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+          />
+        </svg>
+        <span className="font-medium">Kembali ke Beranda</span>
+      </Link>
+
+      {/* Main Content */}
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-4 py-12">
+        <div className="max-w-md w-full">
+          {/* Logo and Header */}
+          <div className="text-center mb-8">
+            <div className="flex justify-center mb-6">
+              <div className="relative">
+                <img 
+                  src="/logo.png" 
+                  alt="Deenara" 
+                  className="h-16 brightness-0 invert drop-shadow-lg"
+                />
+                <div className="absolute inset-0 bg-white blur-xl opacity-30 animate-pulse-slow"></div>
+              </div>
+            </div>
+            <h1 className="text-4xl font-bold text-white mb-3 drop-shadow-lg">
+              Selamat Datang Kembali!
+            </h1>
+            <p className="text-white/90 text-lg">
+              Masuk untuk melanjutkan pengalaman berbelanja Anda
+            </p>
+          </div>
+
+          {/* Error Message */}
           {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg
-                    className="h-5 w-5 text-red-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">{error}</h3>
-                </div>
+            <div className="mb-6 bg-red-500/20 backdrop-blur-sm border border-red-300/30 rounded-2xl p-4 animate-shake">
+              <div className="flex items-start">
+                <svg
+                  className="h-6 w-6 text-white flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <p className="ml-3 text-white font-medium">{error}</p>
               </div>
             </div>
           )}
 
-          <div className="bg-white py-8 px-6 shadow-lg rounded-lg sm:px-10">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="text-sm text-gray-600 mb-2">
-                Sign in with your Google account
+          {/* Login Card */}
+          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 transform hover:scale-[1.02] transition-all duration-300">
+            <div className="flex flex-col items-center space-y-6">
+              {/* Sign In Icon */}
+              <div className="w-20 h-20 bg-gradient-to-br from-primary to-arctic rounded-2xl flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                <svg
+                  className="h-10 w-10 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
               </div>
-              <div id="google-signin-button"></div>
+
+              <div className="text-center">
+                <h2 className="text-2xl font-bold text-charcoal mb-2">
+                  Masuk dengan Google
+                </h2>
+                <p className="text-gray-600">
+                  Autentikasi cepat dan aman
+                </p>
+              </div>
+
+              {/* Google Sign-In Button */}
+              <div className="w-full flex justify-center pt-2">
+                <div id="google-signin-button"></div>
+              </div>
+
               {!googleLoaded && (
-                <div className="text-sm text-gray-500">Loading Google Sign-In...</div>
+                <div className="flex items-center space-x-2 text-gray-500">
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary border-t-transparent"></div>
+                  <span className="text-sm">Memuat Google Sign-In...</span>
+                </div>
               )}
-            </div>
 
-            <div className="mt-6">
-              <div className="relative">
+              {/* Divider */}
+              <div className="w-full relative py-4">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300" />
+                  <div className="w-full border-t border-gray-200"></div>
                 </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Features</span>
+                <div className="relative flex justify-center">
+                  <span className="px-4 bg-white text-sm font-medium text-gray-500">
+                    Mengapa harus masuk?
+                  </span>
                 </div>
               </div>
 
-              <div className="mt-6 grid grid-cols-1 gap-3">
-                <div className="flex items-center text-sm text-gray-600">
-                  <svg
-                    className="h-5 w-5 text-green-500 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Save your cart items
+              {/* Features */}
+              <div className="w-full space-y-3">
+                <div className="flex items-center space-x-3 text-gray-700 group">
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
+                    <svg
+                      className="h-5 w-5 text-primary"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <span className="font-medium">Simpan item favorit Anda</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <svg
-                    className="h-5 w-5 text-green-500 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Track your orders
+                <div className="flex items-center space-x-3 text-gray-700 group">
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
+                    <svg
+                      className="h-5 w-5 text-primary"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <span className="font-medium">Lacak pesanan dengan mudah</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <svg
-                    className="h-5 w-5 text-green-500 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Faster checkout
+                <div className="flex items-center space-x-3 text-gray-700 group">
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
+                    <svg
+                      className="h-5 w-5 text-primary"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <span className="font-medium">Proses checkout lebih cepat</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="text-xs text-center text-gray-500">
-            By signing in, you agree to our{' '}
-            <a href="#" className="text-indigo-600 hover:text-indigo-500">
-              Terms of Service
+          {/* Footer Text */}
+          <p className="mt-6 text-center text-sm text-white/80">
+            Dengan masuk, Anda menyetujui{' '}
+            <a href="#" className="font-semibold text-white hover:underline">
+              Syarat Layanan
             </a>{' '}
-            and{' '}
-            <a href="#" className="text-indigo-600 hover:text-indigo-500">
-              Privacy Policy
-            </a>
-          </div>
+            dan{' '}
+            <a href="#" className="font-semibold text-white hover:underline">
+              Kebijakan Privasi
+            </a>{' '}
+            kami
+          </p>
         </div>
       </div>
     </div>
