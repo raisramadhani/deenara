@@ -17,6 +17,7 @@ const ProductsPage = () => {
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [minRating, setMinRating] = useState(0);
   const [sortBy, setSortBy] = useState('default');
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -202,7 +203,54 @@ const ProductsPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar Filters */}
           <aside className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24">
+            {/* Mobile Filter Toggle Button */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="lg:hidden w-full bg-white rounded-lg shadow-sm p-4 mb-4 flex items-center justify-between hover:bg-gray-50 transition-colors duration-200"
+            >
+              <div className="flex items-center space-x-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-primary"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                  />
+                </svg>
+                <span className="font-semibold text-charcoal">Filter Produk</span>
+                {(searchQuery || selectedCategory !== 'all' || minRating > 0 || 
+                  priceRange[0] > 0 || priceRange[1] < Math.max(...products.map(p => p.price))) && (
+                  <span className="bg-primary text-white text-xs px-2 py-0.5 rounded-full">Aktif</span>
+                )}
+              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={`h-5 w-5 text-gray-400 transition-transform duration-300 ${
+                  showFilters ? 'rotate-180' : ''
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            {/* Filter Card - Collapsible on Mobile */}
+            <div className={`bg-white rounded-lg shadow-sm p-6 lg:sticky lg:top-24 transition-all duration-300 ${
+              showFilters ? 'block' : 'hidden lg:block'
+            }`}>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-charcoal">Filter</h2>
                 <button
