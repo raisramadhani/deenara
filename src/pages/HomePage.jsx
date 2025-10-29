@@ -6,6 +6,8 @@ import ProductCard from '../components/ProductCard';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 
+import ChatWidget from '../components/ChatWidget';
+
 const HomePage = () => {
     const { t } = useTranslation();
     const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -34,6 +36,7 @@ const HomePage = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
+            <ChatWidget />
             {/* Hero Section */}
             <section className="relative bg-gradient-to-br from-primary via-primary-dark to-blue-900 text-white overflow-hidden">
                 {/* Background Pattern */}
