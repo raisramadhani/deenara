@@ -73,7 +73,6 @@ export function AuthProvider({ children }) {
 
       return { success: false, error: 'Login failed' };
     } catch (err) {
-      console.error('Login error:', err);
       const errorMessage = err.response?.data?.error || err.message || 'Failed to login with Google';
       setError(errorMessage);
       return { success: false, error: errorMessage };
@@ -109,7 +108,6 @@ export function AuthProvider({ children }) {
 
       return { success: false, error: 'Login failed' };
     } catch (err) {
-      console.error('Login error:', err);
       const errorMessage = err.response?.data?.error || err.message || 'Failed to login';
       setError(errorMessage);
       return { success: false, error: errorMessage };

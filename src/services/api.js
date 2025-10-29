@@ -26,12 +26,6 @@ export const productService = {
     return response.data;
   },
 
-  // Get products by category
-  getProductsByCategory: async (category) => {
-    const response = await api.get(`/products/category/${category}`);
-    return response.data;
-  },
-
   // Get limited products (for featured section)
   getLimitedProducts: async (limit = 8) => {
     const response = await api.get(`/products?limit=${limit}`);

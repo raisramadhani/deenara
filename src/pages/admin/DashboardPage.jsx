@@ -42,7 +42,6 @@ export default function DashboardPage() {
       setProducts(response.data);
     } catch (err) {
       setError('Gagal memuat produk');
-      console.error('Error fetching products:', err);
     } finally {
       setLoading(false);
     }
@@ -124,7 +123,6 @@ export default function DashboardPage() {
       }, 1500);
     } catch (err) {
       setError('Gagal menyimpan produk');
-      console.error('Error saving product:', err);
     }
   };
 
@@ -140,7 +138,6 @@ export default function DashboardPage() {
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
       setError('Gagal menghapus produk');
-      console.error('Error deleting product:', err);
     }
   };
 

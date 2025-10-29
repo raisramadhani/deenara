@@ -14,15 +14,16 @@ export default function LoginPage() {
 
   const from = location.state?.from?.pathname || '/';
 
+  // Helper function to redirect based on role
+  const redirectUser = (userRole) => {
+    const destination = userRole === USER_ROLES.ADMIN ? '/admin/dashboard' : from;
+    navigate(destination, { replace: true });
+  };
+
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated && !loading && user) {
-      // Redirect admin to dashboard, regular users to home or intended page
-      if (user.role === USER_ROLES.ADMIN) {
-        navigate('/admin/dashboard', { replace: true });
-      } else {
-        navigate(from, { replace: true });
-      }
+      redirectUser(user.role);
     }
   }, [isAuthenticated, loading, user, navigate, from]);
 
@@ -47,14 +48,12 @@ export default function LoginPage() {
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
     if (!clientId) {
-      console.error('Google Client ID not found. Please set VITE_GOOGLE_CLIENT_ID in .env');
       return;
     }
 
     // Check if button container exists
     const buttonContainer = document.getElementById('google-signin-button');
     if (!buttonContainer) {
-      console.error('Google button container not found');
       return;
     }
 
@@ -78,7 +77,7 @@ export default function LoginPage() {
         }
       );
     } catch (error) {
-      console.error('Error initializing Google Sign-In:', error);
+      // Silent fail - Google Sign-In initialization failed
     }
   }, [googleLoaded]);
 
@@ -87,15 +86,10 @@ export default function LoginPage() {
       const result = await loginWithGoogle(response.credential);
 
       if (result.success) {
-        // Redirect based on user role
-        if (result.user?.role === USER_ROLES.ADMIN) {
-          navigate('/admin/dashboard', { replace: true });
-        } else {
-          navigate(from, { replace: true });
-        }
+        redirectUser(result.user?.role);
       }
     } catch (error) {
-      console.error('Error handling Google response:', error);
+      // Error already handled by loginWithGoogle
     }
   };
 
@@ -113,12 +107,7 @@ export default function LoginPage() {
       const result = await loginWithEmail(formData.email, formData.password);
 
       if (result.success) {
-        // Redirect based on user role
-        if (result.user?.role === USER_ROLES.ADMIN) {
-          navigate('/admin/dashboard', { replace: true });
-        } else {
-          navigate(from, { replace: true });
-        }
+        redirectUser(result.user?.role);
       } else {
         setFormError(result.error || 'Login gagal');
       }
