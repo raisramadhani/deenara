@@ -74,13 +74,11 @@ FRONTEND_URL=https://your-domain.vercel.app
 NODE_ENV=production
 ```
 
-**📚 Setup Guide**: See [AUTH_QUICKSTART.md](./AUTH_QUICKSTART.md) or [AUTHENTICATION_SETUP.md](./AUTHENTICATION_SETUP.md) for detailed setup instructions.
-
 ## 🏃 Development
 
 ```bash
 # Start development server
-npm run dev
+npm run dev:full
 
 # Initialize database (first time only)
 # Open: http://localhost:5173/api/auth/init-db
@@ -107,20 +105,6 @@ npm install -g vercel
 # Deploy
 vercel --prod
 ```
-
-**📋 Deployment Guide**: See [DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md) for complete deployment steps.
-
-## 📚 Documentation
-
-| File                                                     | Description                             |
-| -------------------------------------------------------- | --------------------------------------- |
-| [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md) | 📋 Overview implementasi authentication |
-| [AUTHENTICATION_SETUP.md](./AUTHENTICATION_SETUP.md)     | 🔐 Panduan lengkap setup Google OAuth   |
-| [AUTH_QUICKSTART.md](./AUTH_QUICKSTART.md)               | ⚡ Quick reference setup                |
-| [TESTING_GUIDE.md](./TESTING_GUIDE.md)                   | 🧪 Testing procedures                   |
-| [DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)     | ✅ Pre/post deployment checklist        |
-| [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)           | 📁 Project organization                 |
-| [CHANGELOG.md](./CHANGELOG.md)                           | 📝 Version history                      |
 
 ## 🎯 Quick Start with Authentication
 
@@ -170,104 +154,6 @@ vercel --prod
 | `/api/auth/me`      | GET    | Get current user info        |
 | `/api/auth/init-db` | GET    | Initialize database tables   |
 
-## 💻 Usage Examples
-
-### Check Authentication Status
-
-```jsx
-import { useAuth } from "./context/AuthContext";
-
-function MyComponent() {
-  const { user, isAuthenticated, loading } = useAuth();
-
-  if (loading) return <div>Loading...</div>;
-
-  return (
-    <div>
-      {isAuthenticated ? <p>Welcome, {user.name}!</p> : <p>Please login</p>}
-    </div>
-  );
-}
-```
-
-### Protected Routes
-
-```jsx
-import ProtectedRoute from "./components/ProtectedRoute";
-
-<Route
-  path="/profile"
-  element={
-    <ProtectedRoute>
-      <ProfilePage />
-    </ProtectedRoute>
-  }
-/>;
-```
-
-## 🗂️ Project Structure
-
-```
-deenara/
-├── api/                    # Backend API (Vercel Functions)
-│   ├── auth/              # Authentication endpoints
-│   ├── db.js              # Database queries
-│   └── auth-utils.js      # JWT utilities
-├── src/
-│   ├── components/        # React components
-│   ├── context/          # State management (Auth, Cart)
-│   ├── pages/            # Route pages
-│   ├── services/         # API services
-│   └── utils/            # Helper functions
-└── Documentation files
-```
-
-**📂 Full Structure**: See [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)
-
-## 🧪 Testing
-
-```bash
-# Run tests locally
-npm run dev
-
-# Test authentication flow
-# 1. Open http://localhost:5173/login
-# 2. Click "Sign in with Google"
-# 3. Verify user info in Navbar
-# 4. Test logout
-```
-
-**🔬 Testing Guide**: See [TESTING_GUIDE.md](./TESTING_GUIDE.md) for comprehensive testing procedures.
-
-## 📸 Screenshots
-
-- Homepage dengan featured products
-- Product listing dengan filter
-- Product detail page
-- Shopping cart
-- Login page dengan Google Sign-In
-- User profile di Navbar
-
-## 🔒 Security
-
-- ✅ JWT authentication dengan 7-day expiration
-- ✅ HttpOnly cookies untuk production
-- ✅ CORS configuration
-- ✅ Environment variables untuk sensitive data
-- ✅ Token verification pada setiap request
-- ✅ Google OAuth 2.0 secure flow
-
-## 🐛 Troubleshooting
-
-### Common Issues:
-
-- **Google Sign-In tidak muncul**: Check VITE_GOOGLE_CLIENT_ID di .env
-- **Database error**: Verify DATABASE_URL format
-- **CORS error**: Check FRONTEND_URL setting
-- **Token invalid**: Verify Google OAuth settings
-
-**🔍 Full Troubleshooting**: See documentation files above.
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please:
@@ -293,14 +179,6 @@ This project is licensed under the MIT License.
 - [Vercel](https://vercel.com) - Hosting & deployment
 - [Google](https://developers.google.com/identity) - OAuth authentication
 - [Tailwind CSS](https://tailwindcss.com) - Styling framework
-
-## 📞 Support
-
-Need help? Check our documentation:
-
-- Start with [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)
-- For setup: [AUTH_QUICKSTART.md](./AUTH_QUICKSTART.md)
-- For issues: [TESTING_GUIDE.md](./TESTING_GUIDE.md)
 
 ## 🗺️ Roadmap
 
