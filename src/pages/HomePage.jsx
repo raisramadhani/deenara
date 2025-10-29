@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { productService } from '../services/api';
+import { useTranslation } from '../hooks/useTranslation';
 import ProductCard from '../components/ProductCard';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 
 const HomePage = () => {
+    const { t } = useTranslation();
     const [featuredProducts, setFeaturedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -82,9 +84,10 @@ const HomePage = () => {
                 <div className="container mx-auto px-4 py-20 md:py-28 relative z-10">
                     <div className="max-w-3xl">
                         <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                            Selamat Datang                    </h1>
+                            {t('home.hero.title')}
+                        </h1>
                         <p className="text-xl md:text-2xl mb-8 text-blue-100 leading-relaxed">
-                            Temukan produk berkualitas dengan harga terbaik untuk kebutuhan Anda. Belanja mudah, cepat, dan terpercaya!
+                            {t('home.hero.subtitle')}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4">
                             <Link
@@ -94,7 +97,7 @@ const HomePage = () => {
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                 </svg>
-                                Jelajahi Produk
+                                {t('home.hero.exploreBtn')}
                             </Link>
                             <Link
                                 to="/cart"
@@ -103,7 +106,7 @@ const HomePage = () => {
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                Lihat Keranjang
+                                {t('home.hero.viewCartBtn')}
                             </Link>
                         </div>
 
@@ -111,15 +114,15 @@ const HomePage = () => {
                         <div className="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/20">
                             <div className="hover:scale-110 transition-transform duration-300 cursor-default">
                                 <div className="text-3xl font-bold text-yellow-300">500+</div>
-                                <div className="text-sm text-blue-100">Produk Tersedia</div>
+                                <div className="text-sm text-blue-100">{t('home.hero.availableProducts')}</div>
                             </div>
                             <div className="hover:scale-110 transition-transform duration-300 cursor-default">
                                 <div className="text-3xl font-bold text-yellow-300">10K+</div>
-                                <div className="text-sm text-blue-100">Pelanggan Puas</div>
+                                <div className="text-sm text-blue-100">{t('home.hero.satisfiedCustomers')}</div>
                             </div>
                             <div className="hover:scale-110 transition-transform duration-300 cursor-default">
                                 <div className="text-3xl font-bold text-yellow-300">4.8★</div>
-                                <div className="text-sm text-blue-100">Rating Toko</div>
+                                <div className="text-sm text-blue-100">{t('home.hero.storeRating')}</div>
                             </div>
                         </div>
                     </div>
@@ -137,10 +140,10 @@ const HomePage = () => {
             <section className="container mx-auto px-4 py-16">
                 <div className="mb-10 animate-fade-in-up">
                     <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-3">
-                        Produk Unggulan
+                        {t('home.featured.title')}
                     </h2>
                     <p className="text-charcoal-light text-lg">
-                        Produk pilihan terbaik kami untuk Anda
+                        {t('home.featured.subtitle')}
                     </p>
                 </div>
 
@@ -155,7 +158,7 @@ const HomePage = () => {
                         to="/products"
                         className="inline-block btn-primary text-lg"
                     >
-                        Lihat Semua Produk
+                        {t('home.featured.viewAllBtn')}
                     </Link>
                 </div>
             </section>

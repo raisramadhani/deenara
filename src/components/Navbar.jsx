@@ -2,11 +2,15 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
+import { translations } from '../utils/translations';
 import UserAvatar from './UserAvatar';
 
 const Navbar = () => {
   const { getCartCount } = useCart();
   const { user, logout, isAuthenticated } = useAuth();
+  const { language, toggleLanguage } = useLanguage();
+  const t = translations[language].navbar;
   const navigate = useNavigate();
   const cartCount = getCartCount();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -69,7 +73,7 @@ const Navbar = () => {
                   : 'text-white hover:text-gray-200'
               }`}
             >
-              <span className="relative z-10">Beranda</span>
+              <span className="relative z-10">{t.home}</span>
               <span className={`absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${
                 isScrolled ? 'bg-primary' : 'bg-white'
               }`}></span>
@@ -82,7 +86,7 @@ const Navbar = () => {
                   : 'text-white hover:text-gray-200'
               }`}
             >
-              <span className="relative z-10">Produk</span>
+              <span className="relative z-10">{t.products}</span>
               <span className={`absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${
                 isScrolled ? 'bg-primary' : 'bg-white'
               }`}></span>
@@ -95,15 +99,29 @@ const Navbar = () => {
                   : 'text-white hover:text-gray-200'
               }`}
             >
-              <span className="relative z-10">Tentang Kami</span>
+              <span className="relative z-10">{t.about}</span>
               <span className={`absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${
                 isScrolled ? 'bg-primary' : 'bg-white'
               }`}></span>
             </Link>
           </div>
 
-          {/* Cart Icon */}
+          {/* Cart Icon & Language Toggle */}
           <div className="flex items-center space-x-4">
+            {/* Language Toggle Button */}
+            <button
+              onClick={toggleLanguage}
+              className={`flex items-center space-x-2 px-3 py-2 rounded-full transition-all duration-300 font-medium ${
+                isScrolled 
+                  ? 'hover:bg-gray-100 text-charcoal' 
+                  : 'hover:bg-white/20 backdrop-blur-sm text-white'
+              }`}
+              title={language === 'en' ? 'Switch to Indonesian' : 'Ganti ke English'}
+            >
+             
+              <span className="text-sm font-semibold">{language === 'en' ? 'EN' : 'ID'}</span>
+            </button>
+
             {/* User Menu */}
             {isAuthenticated ? (
               <div className="relative">
@@ -167,7 +185,7 @@ const Navbar = () => {
                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                           />
                         </svg>
-                        <span>Logout</span>
+                        <span>{t.logout}</span>
                       </button>
                     </div>
                   </>
@@ -195,7 +213,7 @@ const Navbar = () => {
                     d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
                   />
                 </svg>
-                <span>Login</span>
+                <span>{t.login}</span>
               </Link>
             )}
 
@@ -287,21 +305,21 @@ const Navbar = () => {
                 onClick={() => setShowMobileMenu(false)}
                 className="block px-3 py-2 rounded-md text-base font-medium text-charcoal hover:bg-primary/10 hover:text-primary transition-colors duration-200"
               >
-                Beranda
+                {t.home}
               </Link>
               <Link
                 to="/products"
                 onClick={() => setShowMobileMenu(false)}
                 className="block px-3 py-2 rounded-md text-base font-medium text-charcoal hover:bg-primary/10 hover:text-primary transition-colors duration-200"
               >
-                Produk
+                {t.products}
               </Link>
               <Link
                 to="/about"
                 onClick={() => setShowMobileMenu(false)}
                 className="block px-3 py-2 rounded-md text-base font-medium text-charcoal hover:bg-primary/10 hover:text-primary transition-colors duration-200"
               >
-                Tentang Kami
+                {t.about}
               </Link>
               
               {isAuthenticated && (
@@ -336,7 +354,7 @@ const Navbar = () => {
                         d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
                       />
                     </svg>
-                    <span>Logout</span>
+                    <span>{t.logout}</span>
                   </button>
                 </>
               )}
