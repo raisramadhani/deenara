@@ -1,48 +1,109 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-50">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      isScrolled 
+        ? 'bg-white shadow-lg backdrop-blur-sm' 
+        : 'bg-transparent'
+    }`}>
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className={`flex items-center justify-between transition-all duration-500 ${
+          isScrolled ? 'h-16' : 'h-20'
+        }`}>
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center group relative">
             <img 
-              src="/logo.webp" 
-              alt="Deenara Logo" 
-              className="h-10 w-10 object-contain"
+              src="/logo.png" 
+              alt="Deenara" 
+              className={`object-contain group-hover:scale-110 transition-all duration-300 ${
+                isScrolled ? 'h-8' : 'h-10 brightness-0 invert'
+              }`}
             />
-            <div className="text-2xl font-bold text-primary">Deenara</div>
+            {/* Glow effect on logo */}
+            <div className={`absolute inset-0 bg-primary blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-300 ${
+              !isScrolled && 'group-hover:opacity-50'
+            }`}></div>
           </Link>
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
             <Link
               to="/"
-              className="text-charcoal hover:text-primary transition-colors duration-200 font-medium"
+              className={`transition-all duration-300 font-medium relative group pb-1 ${
+                isScrolled 
+                  ? 'text-charcoal hover:text-primary' 
+                  : 'text-white hover:text-gray-200'
+              }`}
             >
-              Beranda
+              <span className="relative z-10">Beranda</span>
+              <span className={`absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${
+                isScrolled ? 'bg-primary' : 'bg-white'
+              }`}></span>
             </Link>
             <Link
               to="/products"
-              className="text-charcoal hover:text-primary transition-colors duration-200 font-medium"
+              className={`transition-all duration-300 font-medium relative group pb-1 ${
+                isScrolled 
+                  ? 'text-charcoal hover:text-primary' 
+                  : 'text-white hover:text-gray-200'
+              }`}
             >
-              Produk
+              <span className="relative z-10">Produk</span>
+              <span className={`absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${
+                isScrolled ? 'bg-primary' : 'bg-white'
+              }`}></span>
+            </Link>
+            <Link
+              to="/about"
+              className={`transition-all duration-300 font-medium relative group pb-1 ${
+                isScrolled 
+                  ? 'text-charcoal hover:text-primary' 
+                  : 'text-white hover:text-gray-200'
+              }`}
+            >
+              <span className="relative z-10">Tentang Kami</span>
+              <span className={`absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${
+                isScrolled ? 'bg-primary' : 'bg-white'
+              }`}></span>
             </Link>
           </div>
 
           {/* Cart Icon */}
           <Link
             to="/cart"
-            className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors duration-200"
+            className={`relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 group ${
+              isScrolled 
+                ? 'hover:bg-gray-100' 
+                : 'hover:bg-white/20 backdrop-blur-sm'
+            }`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-charcoal"
+              className={`h-6 w-6 group-hover:scale-110 transition-all duration-300 ${
+                isScrolled 
+                  ? 'text-charcoal group-hover:text-primary' 
+                  : 'text-white group-hover:text-gray-200'
+              }`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -55,7 +116,7 @@ const Navbar = () => {
               />
             </svg>
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-bounce">
                 {cartCount}
               </span>
             )}
@@ -63,7 +124,9 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center">
-            <button className="text-charcoal hover:text-primary">
+            <button className={`transition-colors duration-300 ${
+              isScrolled ? 'text-charcoal hover:text-primary' : 'text-white hover:text-gray-200'
+            }`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"

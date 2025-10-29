@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { productService } from '../services/api';
 import { useCart } from '../context/CartContext';
+import { formatCurrency } from '../utils/helpers';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 
@@ -44,7 +45,7 @@ const ProductDetailPage = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Notification */}
       {showNotification && (
-        <div className="fixed top-20 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg animate-slide-in-right">
+        <div className="fixed top-24 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg animate-slide-in-right">
           <div className="flex items-center space-x-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -63,25 +64,39 @@ const ProductDetailPage = () => {
         </div>
       )}
 
+      {/* Hero Section - Mini */}
+      <section className="relative bg-gradient-to-br from-primary via-primary-dark to-blue-900 text-white py-12 overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Breadcrumb */}
+          <nav className="mb-4 text-sm">
+            <ol className="flex items-center space-x-2 text-gray-200">
+              <li>
+                <Link to="/" className="hover:text-white transition-colors">
+                  Beranda
+                </Link>
+              </li>
+              <li>/</li>
+              <li>
+                <Link to="/products" className="hover:text-white transition-colors">
+                  Produk
+                </Link>
+              </li>
+              <li>/</li>
+              <li className="text-white font-medium">Detail Produk</li>
+            </ol>
+          </nav>
+          <h1 className="text-3xl md:text-4xl font-bold">
+            Detail Produk
+          </h1>
+        </div>
+      </section>
+
       <div className="container mx-auto px-4 py-8">
-        {/* Breadcrumb */}
-        <nav className="mb-8 text-sm">
-          <ol className="flex items-center space-x-2 text-charcoal-light">
-            <li>
-              <Link to="/" className="hover:text-primary">
-                Beranda
-              </Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link to="/products" className="hover:text-primary">
-                Produk
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="text-charcoal font-medium">{product.title}</li>
-          </ol>
-        </nav>
 
         {/* Product Detail */}
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -136,7 +151,7 @@ const ProductDetailPage = () => {
               {/* Price */}
               <div className="mb-6">
                 <span className="text-4xl font-bold text-primary">
-                  ${product.price.toFixed(2)}
+                  {formatCurrency(product.price)}
                 </span>
               </div>
 

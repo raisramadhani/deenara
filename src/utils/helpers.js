@@ -1,13 +1,21 @@
 /**
- * Format currency to USD
- * @param {number} amount - Amount to format
- * @returns {string} Formatted currency string
+ * Exchange rate USD to IDR
+ */
+export const USD_TO_IDR_RATE = 16620;
+
+/**
+ * Format currency to IDR (Rupiah)
+ * @param {number} amount - Amount in USD to convert and format
+ * @returns {string} Formatted currency string in Rupiah
  */
 export const formatCurrency = (amount) => {
-  return new Intl.NumberFormat("en-US", {
+  const idrAmount = amount * USD_TO_IDR_RATE;
+  return new Intl.NumberFormat("id-ID", {
     style: "currency",
-    currency: "USD",
-  }).format(amount);
+    currency: "IDR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(idrAmount);
 };
 
 /**
@@ -113,6 +121,7 @@ export const getRatingStars = (rating) => {
 };
 
 export default {
+  USD_TO_IDR_RATE,
   formatCurrency,
   truncateText,
   capitalizeFirstLetter,

@@ -1,9 +1,12 @@
 const Loading = () => {
   return (
     <div className="flex items-center justify-center min-h-[400px]">
-      <div className="text-center">
-        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        <p className="mt-4 text-charcoal-light">Memuat data...</p>
+      <div className="text-center animate-fade-in">
+        <div className="relative inline-block">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary/30"></div>
+          <div className="absolute top-0 left-0 animate-spin rounded-full h-16 w-16 border-4 border-transparent border-t-primary"></div>
+        </div>
+        <p className="mt-6 text-charcoal-light font-medium animate-pulse">Memuat data...</p>
       </div>
     </div>
   );

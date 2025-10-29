@@ -9,13 +9,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <div className="flex items-center space-x-3 mb-4">
+            <div className="mb-4">
               <img 
-                src="/logo.webp" 
-                alt="Deenara Logo" 
-                className="h-10 w-10 object-contain"
+                src="/logo.png" 
+                alt="Deenara" 
+                className="h-10 w-auto object-contain brightness-0 invert"
               />
-              <h3 className="text-2xl font-bold text-white">Deenara</h3>
             </div>
             <p className="text-gray-400 text-sm">
               Platform e-commerce modern yang menyediakan produk berkualitas dengan harga terbaik.
@@ -27,17 +26,22 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-400 hover:text-primary transition-colors text-sm">
+                <Link to="/" className="text-gray-400 hover:text-primary hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Beranda
                 </Link>
               </li>
               <li>
-                <Link to="/products" className="text-gray-400 hover:text-primary transition-colors text-sm">
+                <Link to="/products" className="text-gray-400 hover:text-primary hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Produk
                 </Link>
               </li>
               <li>
-                <Link to="/cart" className="text-gray-400 hover:text-primary transition-colors text-sm">
+                <Link to="/about" className="text-gray-400 hover:text-primary hover:translate-x-1 transition-all duration-200 text-sm inline-block">
+                  Tentang Kami
+                </Link>
+              </li>
+              <li>
+                <Link to="/cart" className="text-gray-400 hover:text-primary hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Keranjang
                 </Link>
               </li>
@@ -48,17 +52,25 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Kategori</h4>
             <ul className="space-y-2">
-              <li className="text-gray-400 text-sm hover:text-primary transition-colors cursor-pointer capitalize">
-                Electronics
+              <li>
+                <span className="text-gray-400 text-sm hover:text-primary hover:translate-x-1 transition-all duration-200 cursor-pointer capitalize inline-block">
+                  Electronics
+                </span>
               </li>
-              <li className="text-gray-400 text-sm hover:text-primary transition-colors cursor-pointer capitalize">
-                Jewelery
+              <li>
+                <span className="text-gray-400 text-sm hover:text-primary hover:translate-x-1 transition-all duration-200 cursor-pointer capitalize inline-block">
+                  Jewelery
+                </span>
               </li>
-              <li className="text-gray-400 text-sm hover:text-primary transition-colors cursor-pointer capitalize">
-                Men's Clothing
+              <li>
+                <span className="text-gray-400 text-sm hover:text-primary hover:translate-x-1 transition-all duration-200 cursor-pointer capitalize inline-block">
+                  Men's Clothing
+                </span>
               </li>
-              <li className="text-gray-400 text-sm hover:text-primary transition-colors cursor-pointer capitalize">
-                Women's Clothing
+              <li>
+                <span className="text-gray-400 text-sm hover:text-primary hover:translate-x-1 transition-all duration-200 cursor-pointer capitalize inline-block">
+                  Women's Clothing
+                </span>
               </li>
             </ul>
           </div>

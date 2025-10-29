@@ -1,22 +1,25 @@
 import { Link } from 'react-router-dom';
+import { formatCurrency } from '../utils/helpers';
 
 const ProductCard = ({ product }) => {
   return (
-    <Link to={`/product/${product.id}`} className="card group">
-      <div className="aspect-square overflow-hidden bg-gray-50 flex items-center justify-center p-4">
+    <Link to={`/product/${product.id}`} className="card group hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+      <div className="aspect-square overflow-hidden bg-gray-50 flex items-center justify-center p-4 relative">
         <img
           src={product.image}
           alt={product.title}
-          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
         />
+        {/* Hover Overlay */}
+        <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-all duration-300"></div>
       </div>
       <div className="p-4">
-        <h3 className="text-charcoal font-medium text-sm line-clamp-2 mb-2 min-h-[2.5rem]">
+        <h3 className="text-charcoal font-medium text-sm line-clamp-2 mb-2 min-h-[2.5rem] group-hover:text-primary transition-colors duration-300">
           {product.title}
         </h3>
         <div className="flex items-center justify-between">
-          <span className="text-primary font-bold text-lg">
-            ${product.price.toFixed(2)}
+          <span className="text-primary font-bold text-lg group-hover:scale-110 inline-block transition-transform duration-300">
+            {formatCurrency(product.price)}
           </span>
           <div className="flex items-center text-xs text-gray-500">
             <svg

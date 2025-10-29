@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { formatCurrency } from '../utils/helpers';
 
 const CartPage = () => {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } =
@@ -7,31 +8,60 @@ const CartPage = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-24 w-24 text-gray-300 mx-auto mb-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-            />
-          </svg>
-          <h2 className="text-2xl font-semibold text-charcoal mb-3">
-            Keranjang Belanja Kosong
-          </h2>
-          <p className="text-charcoal-light mb-6">
-            Anda belum menambahkan produk ke keranjang
-          </p>
-          <Link to="/products" className="btn-primary">
-            Mulai Belanja
-          </Link>
+      <div className="min-h-screen bg-gray-50">
+        {/* Hero Section */}
+        <section className="relative bg-gradient-to-br from-primary via-primary-dark to-blue-900 text-white py-16 overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
+          </div>
+
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-10 right-32 opacity-20 animate-float">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+          </div>
+          
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="text-center">
+              <h1 className="text-5xl md:text-6xl font-bold mb-4">
+                Keranjang Belanja
+              </h1>
+              <p className="text-xl text-gray-100">
+                Kelola produk pilihan Anda sebelum checkout
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-24 w-24 text-gray-300 mx-auto mb-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+            <h2 className="text-2xl font-semibold text-charcoal mb-3">
+              Keranjang Belanja Kosong
+            </h2>
+            <p className="text-charcoal-light mb-6">
+              Anda belum menambahkan produk ke keranjang
+            </p>
+            <Link to="/products" className="btn-primary">
+              Mulai Belanja
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -39,9 +69,36 @@ const CartPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-primary via-primary-dark to-blue-900 text-white py-16 overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
+        </div>
+
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-10 right-32 opacity-20 animate-float">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center">
+            <h1 className="text-5xl md:text-6xl font-bold mb-4">
+              Keranjang Belanja
+            </h1>
+            <p className="text-xl text-gray-100">
+              Kelola produk pilihan Anda sebelum checkout
+            </p>
+          </div>
+        </div>
+      </section>
+
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold text-charcoal">Keranjang Belanja</h1>
+          <h2 className="text-2xl font-bold text-charcoal">Item Keranjang</h2>
           <button
             onClick={clearCart}
             className="text-red-500 hover:text-red-600 font-medium flex items-center space-x-1"
@@ -92,7 +149,7 @@ const CartPage = () => {
                       {item.title}
                     </Link>
                     <p className="text-primary font-semibold text-xl">
-                      ${item.price.toFixed(2)}
+                      {formatCurrency(item.price)}
                     </p>
                   </div>
 
@@ -140,7 +197,7 @@ const CartPage = () => {
                   {/* Subtotal */}
                   <div className="w-24 text-right">
                     <p className="text-lg font-semibold text-charcoal">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      {formatCurrency(item.price * item.quantity)}
                     </p>
                   </div>
 
@@ -197,7 +254,7 @@ const CartPage = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-charcoal-light">Subtotal</span>
                   <span className="font-semibold text-charcoal">
-                    ${getCartTotal().toFixed(2)}
+                    {formatCurrency(getCartTotal())}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
@@ -210,7 +267,7 @@ const CartPage = () => {
                       Total
                     </span>
                     <span className="text-2xl font-bold text-primary">
-                      ${getCartTotal().toFixed(2)}
+                      {formatCurrency(getCartTotal())}
                     </span>
                   </div>
                 </div>
