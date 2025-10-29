@@ -14,6 +14,9 @@ export default async function handler(req, res) {
     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
   );
 
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
+
   if (req.method === "OPTIONS") {
     res.status(200).end();
     return;
@@ -37,28 +40,17 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: "Invalid Google token" });
     }
 
-    console.log("Google user data:", {
-      email: googleUser.email,
-      name: googleUser.name,
-      googleId: googleUser.googleId,
-      avatar: googleUser.avatar,
-    });
-
     // Check if user exists
     let user = await findUserByGoogleId(googleUser.googleId);
 
     // If user doesn't exist, create new user
     if (!user) {
-      console.log("Creating new user with avatar:", googleUser.avatar);
       user = await createUser({
         email: googleUser.email,
         name: googleUser.name,
         googleId: googleUser.googleId,
         avatar: googleUser.avatar,
       });
-      console.log("User created:", user);
-    } else {
-      console.log("Existing user found:", user);
     }
 
     // Generate JWT token
@@ -66,8 +58,6 @@ export default async function handler(req, res) {
 
     // Set cookie
     setCookie(res, "token", token);
-
-    console.log("Returning user data with avatar:", user.avatar);
 
     return res.status(200).json({
       success: true,

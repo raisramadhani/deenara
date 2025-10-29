@@ -23,7 +23,6 @@ if (missingEnvVars.length > 0) {
   process.exit(1);
 }
 
-// Import API handlers AFTER env vars are loaded
 import loginHandler from "./api/auth/login.js";
 import logoutHandler from "./api/auth/logout.js";
 import meHandler from "./api/auth/me.js";
@@ -44,6 +43,12 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
+
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
+  next();
+});
 
 // Request logging middleware
 app.use((req, res, next) => {

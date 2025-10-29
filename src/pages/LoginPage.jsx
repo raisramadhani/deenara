@@ -75,14 +75,10 @@ export default function LoginPage() {
 
   const handleGoogleResponse = async (response) => {
     try {
-      console.log('Google response received');
       const result = await loginWithGoogle(response.credential);
       
       if (result.success) {
-        console.log('Login successful, navigating...');
         navigate(from, { replace: true });
-      } else {
-        console.error('Login failed:', result.error);
       }
     } catch (error) {
       console.error('Error handling Google response:', error);

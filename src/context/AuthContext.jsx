@@ -34,13 +34,10 @@ export function AuthProvider({ children }) {
       });
       
       if (response.data.success) {
-        console.log('User data received:', response.data.user);
-        console.log('Avatar URL:', response.data.user.avatar);
         setUser(response.data.user);
       }
     } catch (err) {
       // User not authenticated
-      console.log('Auth check failed:', err.message);
       setUser(null);
       localStorage.removeItem('token');
     } finally {
@@ -53,8 +50,6 @@ export function AuthProvider({ children }) {
       setLoading(true);
       setError(null);
 
-      console.log('Sending login request to:', `${API_URL}/auth/login`);
-
       const response = await axios.post(
         `${API_URL}/auth/login`,
         { credential },
@@ -66,11 +61,7 @@ export function AuthProvider({ children }) {
         }
       );
 
-      console.log('Login response:', response.data);
-
       if (response.data.success) {
-        console.log('Login successful! User data:', response.data.user);
-        console.log('Avatar URL from login:', response.data.user.avatar);
         setUser(response.data.user);
         // Store token in localStorage for subsequent requests
         if (response.data.token) {

@@ -36,15 +36,11 @@ const UserAvatar = ({ user, size = 'md', className = '' }) => {
       alt={user?.name || 'User'}
       className={`${sizeClass} rounded-full object-cover border-2 border-primary ${className}`}
       onError={(e) => {
-        console.error('Avatar image failed to load:', user.avatar);
         setImageError(true);
         // Try fallback service
         if (!e.target.src.includes('ui-avatars.com')) {
           e.target.src = getFallbackAvatar();
         }
-      }}
-      onLoad={() => {
-        console.log('Avatar loaded successfully:', user.avatar);
       }}
       title={user?.name}
     />
