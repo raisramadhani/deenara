@@ -50,12 +50,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Request logging middleware
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
-  next();
-});
-
 // Convert Vercel serverless handlers to Express routes
 const wrapHandler = (handler) => async (req, res) => {
   try {
@@ -103,28 +97,14 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`\n🚀 Development API Server started!`);
-  console.log(`📍 Server running at: http://localhost:${PORT}`);
-  console.log(`📍 Frontend should use: http://localhost:${PORT}/api`);
-  console.log(`\n✅ Environment check:`);
-  console.log(
-    `   - Google Client ID: ${process.env.GOOGLE_CLIENT_ID ? "✓" : "✗"}`
-  );
-  console.log(`   - Database URL: ${process.env.DATABASE_URL ? "✓" : "✗"}`);
-  console.log(`   - JWT Secret: ${process.env.JWT_SECRET ? "✓" : "✗"}`);
-  console.log(`\n🔍 Test endpoints:`);
-  console.log(`   - Health: http://localhost:${PORT}/api/health`);
-  console.log(`   - Init DB: http://localhost:${PORT}/api/auth/init-db`);
-  console.log("\n");
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
 
 // Graceful shutdown
 process.on("SIGTERM", () => {
-  console.log("SIGTERM received. Closing server...");
   process.exit(0);
 });
 
 process.on("SIGINT", () => {
-  console.log("\nSIGINT received. Closing server...");
   process.exit(0);
 });
