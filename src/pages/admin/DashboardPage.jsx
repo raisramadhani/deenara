@@ -245,7 +245,7 @@ Format your response as JSON:
           image: imagePreview || imageUrl
         };
         setProducts([newProduct, ...products]);
-        setSuccess('Produk berhasil ditambahkan!');
+        setSuccess('Product added successfully!');
       } else {
         const response = await axios.put(
           `${API_BASE_URL}/products/${selectedProduct.id}`,
@@ -423,7 +423,7 @@ Format your response as JSON:
             <div className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 z-10">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-2xl font-bold text-charcoal">
-                  {modalMode === 'create' ? 'Tambah Produk Baru' : 'Edit Produk'}
+                  {modalMode === 'create' ? 'Add New Product' : 'Edit Product'}
                 </h3>
                 <button
                   onClick={closeModal}

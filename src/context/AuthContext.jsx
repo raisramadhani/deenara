@@ -11,7 +11,6 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Check if user is already logged in
   useEffect(() => {
     checkAuth();
   }, []);
@@ -38,7 +37,7 @@ export function AuthProvider({ children }) {
         setUser(response.data.user);
       }
     } catch (err) {
-      // User not authenticated
+     
       setUser(null);
       localStorage.removeItem('token');
     } finally {
@@ -64,7 +63,7 @@ export function AuthProvider({ children }) {
 
       if (response.data.success) {
         setUser(response.data.user);
-        // Store token in localStorage for subsequent requests
+        
         if (response.data.token) {
           localStorage.setItem('token', response.data.token);
         }
@@ -99,7 +98,7 @@ export function AuthProvider({ children }) {
 
       if (response.data.success) {
         setUser(response.data.user);
-        // Store token in localStorage for subsequent requests
+      
         if (response.data.token) {
           localStorage.setItem('token', response.data.token);
         }

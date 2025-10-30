@@ -14,20 +14,17 @@ export default function LoginPage() {
 
   const from = location.state?.from?.pathname || '/';
 
-  // Helper function to redirect based on role
   const redirectUser = (userRole) => {
     const destination = userRole === USER_ROLES.ADMIN ? '/admin/dashboard' : from;
     navigate(destination, { replace: true });
   };
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated && !loading && user) {
       redirectUser(user.role);
     }
   }, [isAuthenticated, loading, user, navigate, from]);
 
-  // Load Google Sign-In script
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
@@ -41,7 +38,6 @@ export default function LoginPage() {
     };
   }, []);
 
-  // Initialize Google Sign-In
   useEffect(() => {
     if (!googleLoaded || !window.google) return;
 
@@ -51,7 +47,6 @@ export default function LoginPage() {
       return;
     }
 
-    // Check if button container exists
     const buttonContainer = document.getElementById('google-signin-button');
     if (!buttonContainer) {
       return;
@@ -77,7 +72,7 @@ export default function LoginPage() {
         }
       );
     } catch (error) {
-      // Silent fail - Google Sign-In initialization failed
+
     }
   }, [googleLoaded]);
 
@@ -89,7 +84,7 @@ export default function LoginPage() {
         redirectUser(result.user?.role);
       }
     } catch (error) {
-      // Error already handled by loginWithGoogle
+
     }
   };
 
@@ -98,7 +93,7 @@ export default function LoginPage() {
     setFormError('');
 
     if (!formData.email || !formData.password) {
-      setFormError('Email dan password harus diisi');
+      setFormError('Email and password are required');
       return;
     }
 
@@ -109,10 +104,10 @@ export default function LoginPage() {
       if (result.success) {
         redirectUser(result.user?.role);
       } else {
-        setFormError(result.error || 'Login gagal');
+        setFormError(result.error || 'Login failed');
       }
     } catch (error) {
-      setFormError('Terjadi kesalahan saat login');
+      setFormError('An error occurred during login');
     } finally {
       setFormLoading(false);
     }
@@ -126,12 +121,31 @@ export default function LoginPage() {
     setFormError('');
   };
 
+  const handleQuickLoginAdmin = async () => {
+    setFormError('');
+    setFormLoading(true);
+
+    try {
+      const result = await loginWithEmail('test@example.com', 'password');
+
+      if (result.success) {
+        redirectUser(result.user?.role);
+      } else {
+        setFormError(result.error || 'Quick login failed');
+      }
+    } catch (error) {
+      setFormError('An error occurred during quick login');
+    } finally {
+      setFormLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-primary-light to-arctic">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-white border-t-transparent mx-auto"></div>
-          <p className="mt-4 text-white font-medium">Memuat...</p>
+          <p className="mt-4 text-white font-medium">Loading...</p>
         </div>
       </div>
     );
@@ -139,14 +153,13 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-primary via-primary-light to-arctic">
-      {/* Animated Background Shapes */}
+
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-float"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-float-delayed"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse-slow"></div>
       </div>
 
-      {/* Back to Home Button */}
       <Link
         to="/"
         className="absolute top-6 left-6 flex items-center space-x-2 text-white hover:text-white/80 transition-all duration-300 z-50 group backdrop-blur-sm bg-white/10 px-4 py-2 rounded-full hover:bg-white/20"
@@ -164,13 +177,12 @@ export default function LoginPage() {
             d="M10 19l-7-7m0 0l7-7m-7 7h18"
           />
         </svg>
-        <span className="font-medium">Kembali ke Beranda</span>
+        <span className="font-medium">Back to Home</span>
       </Link>
 
-      {/* Main Content */}
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4 py-12">
         <div className="max-w-md w-full">
-          {/* Logo and Header */}
+
           <div className="text-center mb-8">
             <div className="flex justify-center mb-6">
               <div className="relative">
@@ -183,14 +195,13 @@ export default function LoginPage() {
               </div>
             </div>
             <h1 className="text-4xl font-bold text-white mb-3 drop-shadow-lg">
-              Selamat Datang Kembali!
+              Welcome Back!
             </h1>
             <p className="text-white/90 text-lg">
-              Masuk untuk melanjutkan pengalaman berbelanja Anda
+              Sign in to continue your shopping experience
             </p>
           </div>
 
-          {/* Error Message */}
           {(error || formError) && (
             <div className="mb-6 bg-red-500/20 backdrop-blur-sm border border-red-300/30 rounded-2xl p-4 animate-shake">
               <div className="flex items-start">
@@ -205,17 +216,16 @@ export default function LoginPage() {
                     strokeLinejoin="round"
                     strokeWidth={2}
                     d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
+                    s />
                 </svg>
                 <p className="ml-3 text-white font-medium">{error || formError}</p>
               </div>
             </div>
           )}
 
-          {/* Login Card */}
           <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 transform hover:scale-[1.02] transition-all duration-300">
             <div className="flex flex-col items-center space-y-6">
-              {/* Sign In Icon */}
+
               <div className="w-20 h-20 bg-gradient-to-br from-primary to-arctic rounded-2xl flex items-center justify-center shadow-lg">
                 <svg
                   className="h-10 w-10 text-white"
@@ -234,14 +244,26 @@ export default function LoginPage() {
 
               <div className="text-center">
                 <h2 className="text-2xl font-bold text-charcoal mb-2">
-                  Masuk ke Akun Anda
+                  Sign in to Your Account
                 </h2>
                 <p className="text-gray-600">
-                  Pilih metode login yang Anda inginkan
+                  Choose your preferred login method
                 </p>
               </div>
-
-              {/* Email/Password Form */}
+              <div className="w-full">
+                <button
+                  type="button"
+                  onClick={handleQuickLoginAdmin}
+                  disabled={formLoading}
+                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 px-6 rounded-xl font-semibold hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 border-2 border-orange-300"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  <span>Quick Login as Test Admin</span>
+                </button>
+              </div>
+              
               <form onSubmit={handleEmailLogin} className="w-full space-y-4">
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
@@ -252,8 +274,8 @@ export default function LoginPage() {
                     id="email"
                     name="email"
                     value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="nama@email.com"
+                    s onChange={handleInputChange}
+                    placeholder="name@email.com"
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 outline-none"
                     autoComplete="email"
                   />
@@ -269,7 +291,7 @@ export default function LoginPage() {
                     value={formData.password}
                     onChange={handleInputChange}
                     placeholder="••••••••"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 outline-none"
+                    s className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 outline-none"
                     autoComplete="current-password"
                   />
                 </div>
@@ -281,32 +303,30 @@ export default function LoginPage() {
                   {formLoading ? (
                     <>
                       <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-                      <span>Memproses...</span>
+                      <span>Processing...</span>
                     </>
                   ) : (
                     <>
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                       </svg>
-                      <span>Masuk dengan Email</span>
+                      <span>Sign in with Email</span>
                     </>
                   )}
                 </button>
               </form>
 
-              {/* Divider */}
               <div className="w-full relative py-2">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-200"></div>
                 </div>
                 <div className="relative flex justify-center">
                   <span className="px-4 bg-white text-sm font-medium text-gray-500">
-                    atau
+                    or
                   </span>
                 </div>
               </div>
 
-              {/* Google Sign-In Button */}
               <div className="w-full flex justify-center">
                 <div id="google-signin-button"></div>
               </div>
@@ -314,23 +334,21 @@ export default function LoginPage() {
               {!googleLoaded && (
                 <div className="flex items-center space-x-2 text-gray-500">
                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary border-t-transparent"></div>
-                  <span className="text-sm">Memuat Google Sign-In...</span>
+                  <span className="text-sm">Loading Google Sign-In...</span>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Footer Text */}
           <p className="mt-6 text-center text-sm text-white/80">
-            Dengan masuk, Anda menyetujui{' '}
+            By signing in, you agree to our{' '}
             <a href="#" className="font-semibold text-white hover:underline">
-              Syarat Layanan
+              Terms of Service
             </a>{' '}
-            dan{' '}
+            and{' '}
             <a href="#" className="font-semibold text-white hover:underline">
-              Kebijakan Privasi
-            </a>{' '}
-            kami
+              Privacy Policy
+            </a>
           </p>
         </div>
       </div>
